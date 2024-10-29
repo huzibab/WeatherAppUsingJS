@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+    
+    .container{
+        height: 62vh;
+        width: 27%;
+        background: rgb(4,240,214);
+        background: linear-gradient(90deg, rgba(4,240,214,1) 8%, rgba(0,155,255,1) 100%);
+        border-radius: 6px;
+        margin: 7% auto;
+}
+#srch{
+    border-radius: 9px;
+    border: 0;
+    width: 70%;
+    height: 29px;
+    margin: 30px 0 0 40px;
+}
+#srch::placeholder{
+    text-align: center;
+    opacity: 0.6;
+}
+.details{
+font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+/* display: block; */
+}
+.clrimg{
+    width: 80px;
+    margin: 40px 0 0 39%;
+}
+.cityname, .temperature{
+    display: block;
+    text-align: center;
+}
+.cityname{
+    margin: 10px 0 0 0;
+    font-size: 35px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+}
+.temperature{
+    margin: -10px 0 0 0;
+    font-size: 30px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+}
+.humid{
+    width: 50px;
+    padding: 0 0 0 19px;
+}
+.wind{
+    width: 50px;
+    padding: 0 0 0 14px;
+}
+.extras{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px 0 40px;
+}
+.hum{
+    display: inline;
+}
+.humidval{
+    padding: 15px 0 0 20px;
+}
+.windval{
+    padding: 14px 0 0 0;
+}
+.windp{
+    padding: 0 0 0 15px;
+
+}
+.humidval, .humidp, .windval, .windp{
+    margin-top: -14px;
+    font-family: "Poppins", sans-serif;
+    font-weight:600;
+    color: rgb(250, 250, 250);
+}
+.btn{
+    background: white;
+    border-radius: 20px;
+    border: 0;
+    cursor: pointer;
+    /* margin: 10px 0 0 0; */
+}
+.search-button{
+    width: 26px;
+    /* margin-top: 200px; */
+}
+</style>
+<div class="container">
+    <div class="search">
+        <input type="text" name="" id="srch" placeholder="Search">
+        <button class="btn"><img src="search.png" class="search-button" alt=""></button>
+    </div>
+    
+    <div class="details">
+        <img src="clearorsunny.png" alt="clear" class="clrimg">
+        <p class="cityname">New York</p>
+        <p class="temperature">28&deg;C</p>
+    </div>
+<div class="extras">
+    <div class="hum">
+        <img src="humidity.png" alt="humidity" class="humid">
+        <p class="humidval">48%</p>
+        <p class="humidp">Humidity</p>
+    </div>
+    <div class="winds">
+        <img src="wind.png" alt="wind" class="wind">
+        <p class="windval">10.29km/h</p>
+        <p class="windp">Wind</p>
+    </div>
+</div>
+</div>
+</body>
+
+<script>
+    let img = document.querySelector(".clrimg")
+    let srcin = document.querySelector("#srch");
+    let srcbtn = document.querySelector(".btn"); 
+    let cty = document.querySelector(".cityname");
+    let tem = document.querySelector(".temperature");
+    let hval = document.querySelector(".humidval");
+    let wval = document.querySelector(".windval");
+
+    const apikey = "8e156a9868be50cb71a3c6cbbef6d77e";
+
+    async function weatherCheck(cityn){
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityn}&units=metric&appid=${apikey}`;
+        const response = await fetch(apiUrl);
+        
+        // Check if the response is valid
+        if(response.ok){
+        var data = await response.json();
+        console.log(data);
+        cty.innerHTML = data.name;
+        tem.innerHTML = Math.round(data.main.temp) + "&deg;C";
+        hval.innerHTML = data.main.humidity + "%";
+        wval.innerHTML = data.wind.speed + " km/h";
+        } else
+        alert('City not found. Please enter a valid city name.');
+    }
+
+    // Add event listener to the button
+    srcbtn.addEventListener("click", () => {
+        const city = srcin.value.trim(); // Get the city from input
+        if(city) {
+            weatherCheck(city);  // Pass the city name to the function
+        } else {
+            alert("Please enter a city name");
+        }
+    });
+</script>
+
+</html>
